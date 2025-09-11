@@ -24,7 +24,7 @@ export class GeminiCardParser {
       throw new Error('Gemini API key not set')
     }
 
-    const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
     const prompt = `
     Parse this poker hand description and return ONLY a JSON object with this exact format:

@@ -40,12 +40,18 @@ A modern, AI-powered poker high hand tracking application that helps poker rooms
    npm install
    ```
 
-3. **Start the development server**
+3. **Set up environment variables (optional)**
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_GEMINI_API_KEY=your_gemini_api_key_here
+   ```
+
+4. **Start the development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser** to `http://localhost:5173`
+5. **Open your browser** to `http://localhost:5173`
 
 ### 🔧 Optional: AI Hand Recognition
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Card } from './Card'
-import { GeminiCardParser, type ParsedHand } from './gemini'
+import { ClaudeHandParser, type ParsedHand } from './claudeParser'
 
 interface HighHandEntry {
   id: number
@@ -28,11 +28,11 @@ function App() {
   const [currentAmount, setCurrentAmount] = useState('')
   const [entries, setEntries] = useState<HighHandEntry[]>([])
   const [nextId, setNextId] = useState(1)
-  const [geminiApiKey, setGeminiApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '')
-  const [cardParser] = useState(() => new GeminiCardParser(import.meta.env.VITE_GEMINI_API_KEY))
+  const [claudeApiKey, setClaudeApiKey] = useState(import.meta.env.VITE_CLAUDE_API_KEY || '')
+  const [cardParser] = useState(() => new ClaudeHandParser(import.meta.env.VITE_CLAUDE_API_KEY))
   const [currentBestHand, setCurrentBestHand] = useState<CurrentBestHand | null>(null)
   const [isParsingHand, setIsParsingHand] = useState(false)
-  const [showApiKeyInput, setShowApiKeyInput] = useState(!import.meta.env.VITE_GEMINI_API_KEY)
+  const [showApiKeyInput, setShowApiKeyInput] = useState(!import.meta.env.VITE_CLAUDE_API_KEY)
   const [demoMode, setDemoMode] = useState(false)
   const [showStats, setShowStats] = useState(false)
   const [notification, setNotification] = useState<{message: string, type: 'success' | 'error' | 'info'} | null>(null)
@@ -98,21 +98,21 @@ function App() {
   }
 
   const handleApiKeySubmit = () => {
-    if (geminiApiKey.trim()) {
-      cardParser.setApiKey(geminiApiKey.trim())
+    if (claudeApiKey.trim()) {
+      cardParser.setApiKey(claudeApiKey.trim())
       setShowApiKeyInput(false)
-      showNotification('✅ Gemini AI enabled! Now you can use natural language for hands.', 'success')
+      showNotification('✅ Claude AI enabled! Now you can use natural language for hands.', 'success')
     } else {
       showNotification('⚠️ Please enter a valid API key', 'error')
     }
   }
 
-  const parseHandWithGemini = async (handDescription: string): Promise<ParsedHand | null> => {
+  const parseHandWithClaude = async (handDescription: string): Promise<ParsedHand | null> => {
     try {
-      if (geminiApiKey) {
+      if (claudeApiKey) {
         const result = await cardParser.parseHand(handDescription)
         if (result) {
-          showNotification(`🤖 AI parsed: ${result.handName}`, 'success')
+          showNotification(`🤖 Claude parsed: ${result.handName}`, 'success')
           return result
         }
       }
@@ -136,12 +136,12 @@ function App() {
     if (!currentPlayer.trim() || !currentHand.trim()) return
     
     setIsParsingHand(true)
-    const parsedHand = await parseHandWithGemini(currentHand)
+    const parsedHand = await parseHandWithClaude(currentHand)
     
     const newBest: CurrentBestHand = {
       player: currentPlayer.trim(),
       hand: currentHand.trim(),
-      parsedHand,
+      parsedHand: parsedHand || undefined,
       timestamp: new Date()
     }
     
@@ -170,7 +170,7 @@ function App() {
     setIsParsingHand(true)
     let parsedHand = handToRecord.parsedHand
     if (!parsedHand) {
-      parsedHand = await parseHandWithGemini(handToRecord.hand)
+      parsedHand = await parseHandWithClaude(handToRecord.hand)
     }
 
     const amount = parseFloat(currentAmount) || 0
@@ -180,7 +180,7 @@ function App() {
       player: handToRecord.player,
       hand: handToRecord.hand,
       amount: amount,
-      parsedHand
+      parsedHand: parsedHand || undefined
     }
 
     setEntries(prev => [newEntry, ...prev])
@@ -420,13 +420,13 @@ function App() {
       
       {showApiKeyInput && (
         <div className="api-key-section">
-          <h3>Optional: Enter Gemini API Key for Smart Hand Parsing</h3>
+          <h3>Optional: Enter Claude API Key for Smart Hand Parsing</h3>
           <div className="api-input-group">
             <input
               type="password"
-              placeholder="Gemini API Key (optional)"
-              value={geminiApiKey}
-              onChange={(e) => setGeminiApiKey(e.target.value)}
+              placeholder="Claude API Key (optional)"
+              value={claudeApiKey}
+              onChange={(e) => setClaudeApiKey(e.target.value)}
             />
             <button onClick={handleApiKeySubmit} className="api-submit">
               Set Key
@@ -435,7 +435,7 @@ function App() {
               Skip
             </button>
           </div>
-          <p className="api-note">With an API key, the app can automatically parse hand descriptions and display cards. Without it, you'll get fallback parsing for common hands.</p>
+          <p className="api-note">With Claude API, the app can intelligently parse hand descriptions and display cards. Without it, you'll get smart fallback parsing for common hands.</p>
         </div>
       )}
       

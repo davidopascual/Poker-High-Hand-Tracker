@@ -6,7 +6,7 @@ A modern, AI-powered poker high hand tracking application that helps poker rooms
 
 ## Features
 
-- 🎯 **Smart Hand Recognition** - AI-powered hand parsing with Gemini API
+- 🎯 **Smart Hand Recognition** - AI-powered hand parsing with Claude API
 - ⏱️ **Flexible Timer System** - Customizable tracking periods (5-60 minutes)  
 - 🃏 **Visual Card Display** - Beautiful card representations for all hands
 - 📊 **Real-time Rankings** - Automatic hand strength comparison
@@ -17,7 +17,7 @@ A modern, AI-powered poker high hand tracking application that helps poker rooms
 
 - React 18 with TypeScript
 - Vite for fast development
-- Google Gemini AI API
+- Claude AI API
 - Modern CSS with custom properties
 - Responsive design
 
@@ -43,7 +43,7 @@ A modern, AI-powered poker high hand tracking application that helps poker rooms
 3. **Set up environment variables (optional)**
    Create a `.env` file in the root directory:
    ```env
-   VITE_GEMINI_API_KEY=your_gemini_api_key_here
+   VITE_CLAUDE_API_KEY=your_claude_api_key_here
    ```
 
 4. **Start the development server**
@@ -55,9 +55,9 @@ A modern, AI-powered poker high hand tracking application that helps poker rooms
 
 ### 🔧 Optional: AI Hand Recognition
 
-For enhanced hand parsing capabilities, add a Gemini API key:
+For enhanced hand parsing capabilities, add a Claude API key:
 
-1. Get a free API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+1. Get an API key from [Anthropic Console](https://console.anthropic.com/)
 2. Enter your API key in the app's settings panel
 3. Now you can use natural language like "queen high flush" or "pocket aces"
 

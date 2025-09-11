@@ -457,9 +457,44 @@ function App() {
         </div>
         
         <div className="timer-display">
-          <span className={`time ${timeRemaining <= 60 ? 'warning' : ''}`}>
-            {formatTime(timeRemaining)}
-          </span>
+          <div className="circular-timer">
+            <svg className="timer-ring" viewBox="0 0 120 120">
+              <circle
+                className="timer-ring-track"
+                cx="60"
+                cy="60"
+                r="54"
+                fill="transparent"
+                stroke="rgba(255, 255, 255, 0.1)"
+                strokeWidth="8"
+              />
+              <circle
+                className={`timer-ring-progress ${timeRemaining <= 60 ? 'warning' : ''}`}
+                cx="60"
+                cy="60"
+                r="54"
+                fill="transparent"
+                stroke={timeRemaining <= 60 ? 'var(--danger)' : 'var(--success)'}
+                strokeWidth="8"
+                strokeLinecap="round"
+                strokeDasharray={`${2 * Math.PI * 54}`}
+                strokeDashoffset={`${2 * Math.PI * 54 * (1 - (timeRemaining / (timerMinutes * 60)))}`}
+                style={{
+                  transition: 'stroke-dashoffset 1s linear, stroke 0.3s ease',
+                  transform: 'rotate(-90deg)',
+                  transformOrigin: '50% 50%'
+                }}
+              />
+            </svg>
+            <div className="timer-content">
+              <span className={`time ${timeRemaining <= 60 ? 'warning' : ''}`}>
+                {formatTime(timeRemaining)}
+              </span>
+              <span className="timer-label">
+                {isRunning ? 'ACTIVE' : 'PAUSED'}
+              </span>
+            </div>
+          </div>
         </div>
         
         <div className="timer-controls">
